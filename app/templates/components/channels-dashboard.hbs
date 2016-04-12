@@ -1,0 +1,5 @@
+<div class="items">
+  {{#each items as |item|}}
+    {{channel-item group=item groups=groups onUpdate=(action 'updateState')}}
+  {{/each}}
+</div>
