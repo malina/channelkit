@@ -9,19 +9,16 @@ export default Ember.Component.extend({
 
   init() {
     this._super(...arguments);
-    this.prepareChildren();
   },
 
-  prepareChildren() {
-    var children = this.get('groups').filterBy('parent_id', parseInt(this.get('group.id'), 10));
-    this.set('group.children', children);
-  },
+  children: function () {
+    return this.get('groups').filterBy('parent_id', parseInt(this.get('group.id'), 10));
+  }.property('groups.@each.parent_id'),
 
 
-  hasChildren: Ember.computed('groups.@each.parent_id', function() {
-    var children = this.get('groups').filterBy('parent_id', parseInt(this.get('group.id'), 10));
-    return children.get('length') > 0;
-  }),
+  hasChildren: function() {
+    return this.get('children.length') > 0;
+  }.property('children'),
 
   dragStart(event) {
     event.stopPropagation();
@@ -35,20 +32,14 @@ export default Ember.Component.extend({
   drop(event) {
     event.stopPropagation();
     var id = event.dataTransfer.getData('text/data');
-
     if (parseInt(id, 10) === this.get('group.id')) {
       return;
     }
-
-    this.get('store').findRecord('channel', parseInt(id, 10)).then((channel)=> {
-      channel.set('parent_id', this.get('group.id'));
-      //channel.save();
-      this.get('onUpdate')();
-    });
+    this.get('onUpdate')(id, this.get('group.id'));
   },
 
   actions:{
-    expandGroup: function (_event) {
+    expandGroup: function () {
       this.set('expanded', !this.get('expanded'));
     }
   }

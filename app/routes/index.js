@@ -12,8 +12,7 @@ export default Ember.Route.extend({
   //       {id: 7, name: "Photography", parent_id: 2}
   //     ]);
   // }
-  // model() {
-  //   window.s = this.store.findAll('channel');
-  //   return this.store.findAll('channel');
-  // }
+  model() {
+    return this.store.findAll('channel');
+  }
 });

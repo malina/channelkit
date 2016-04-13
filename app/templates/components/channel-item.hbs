@@ -1,17 +1,17 @@
 <!-- {{group.parent_id}} -->
-<div class="item">
+<div class="item {{if hasChildren "with-children" " "}}">
   {{#if hasChildren}}
-    <span {{action "expandGroup"}}>
+    <span class='button' {{action "expandGroup"}}>
       {{if expanded ">" "V"}}
     </span>
   {{/if}}
-  <span {{action "expandGroup"}}>
+  <span class='button' {{action "expandGroup"}}>
     {{group.name}}
   </span>
   {{#if hasChildren}}
     <div class="items has-children {{if expanded "hide" " "}}">
-      {{#each group.children as |item|}}
-        {{channel-item group=item groups=groups}}
+      {{#each children as |item|}}
+        {{channel-item group=item groups=groups onUpdate=onUpdate}}
       {{/each}}
     </div>
   {{/if}}
